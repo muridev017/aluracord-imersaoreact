@@ -130,7 +130,7 @@ export default function PaginaInicial() {
             />
             <Button
               type='submit'
-              label={!isFormEnable ? "Entrar" : 'Entrar'}
+              label={!isFormEnable ? "Digite mais de 2 caracteres para entrar" : 'Entrar'}
               disabled={!isFormEnable}
               fullWidth
               buttonColors={{
