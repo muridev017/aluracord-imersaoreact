@@ -5,10 +5,41 @@ import appConfig from '../config.json';
 export default function ChatPage() {
     // Sua lógica vai aqui
     const [mensagem, setMensagem] = React.useState('');
-    const [listaDeMensagens, setListaDeMensagens] = React.useState([])
+    const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
+  
     // ./Sua lógica vai aqui
 
 
+
+    // function onClick(mandaMensagem){
+    //     const clicou= {
+    //         id: enviaMensagem.length + 1,
+    //         de: 'muridev017',
+    //         texto: mandaMensagem,
+    //     }
+
+    //     setClicaEnvia([
+    //         clicou,
+    //         ...enviaMensagem,
+    //     ]);
+    //     setEnviaMensagem('')
+    // }
+
+    function handleNovaMensagem(novaMensagem) {
+        const mensagem = {
+            id: listaDeMensagens.length + 1,
+            de: 'muridev017',
+            texto: novaMensagem,
+        }
+
+
+        setListaDeMensagens([
+            mensagem,
+            ...listaDeMensagens,
+        ]);
+        setMensagem('');
+    }
+    
 
     return (
         <Box
@@ -45,13 +76,12 @@ export default function ChatPage() {
                         flexDirection: 'column',
                         borderRadius: '5px',
                         padding: '16px',
+                      
+                        
                     }}
                 >
 
-                    <MessageList />
-                    {listaDeMensagens.map((mensagemAtual) => {
-                        return 'Mensagem:' + mensagemAtual
-                    })}
+                    <MessageList mensagens={listaDeMensagens} />
 
                     <Box
                         as="form"
@@ -60,6 +90,7 @@ export default function ChatPage() {
                             alignItems: 'center',
                         }}
                     >
+
                         <TextField
                             value={mensagem}
                             onChange={(event) => {
@@ -69,11 +100,8 @@ export default function ChatPage() {
                             onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
                                     event.preventDefault();
-                                    setListaDeMensagens([
-                                        ...listaDeMensagens,
-                                        mensagem
-                                    ]);
-                                    setMensagem('');
+
+                                    handleNovaMensagem(mensagem);
 
                                 }
 
@@ -91,6 +119,13 @@ export default function ChatPage() {
                                 color: appConfig.theme.colors.neutrals[200],
                             }}
                         />
+                         <Button
+                    variant='tertiary'
+                    colorVariant='primary'
+                    label='Send'
+                    onClick={()=>handleNovaMensagem(mensagem)}
+                    
+                />
                     </Box>
                 </Box>
             </Box>
@@ -116,13 +151,15 @@ function Header() {
     )
 }
 
+
 function MessageList(props) {
-    console.log('MessageList', props);
+    
+    console.log(props);
     return (
         <Box
             tag="ul"
             styleSheet={{
-                overflow: 'scroll',
+                overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column-reverse',
                 flex: 1,
@@ -130,50 +167,55 @@ function MessageList(props) {
                 marginBottom: '16px',
             }}
         >
-
-            <Text
-                // key={mensagem.id}
-                tag="li"
-                styleSheet={{
-                    borderRadius: '5px',
-                    padding: '6px',
-                    marginBottom: '12px',
-                    hover: {
-                        backgroundColor: appConfig.theme.colors.neutrals[700],
-                    }
-                }}
-            >
-                <Box
-                    styleSheet={{
-                        marginBottom: '8px',
-                    }}
-                >
-                    <Image
-                        styleSheet={{
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%',
-                            display: 'inline-block',
-                            marginRight: '8px',
-                        }}
-                        src={`https://github.com/muridev017.png`}
-                    />
-                    {/* <Text tag="strong">
-                        {mensagem.de}
-                    </Text> */}
+            {props.mensagens.map((mensagem) => {
+                return (
                     <Text
+                        key={mensagem.id}
+                        tag="li"
                         styleSheet={{
-                            fontSize: '10px',
-                            marginLeft: '8px',
-                            color: appConfig.theme.colors.neutrals[300],
+                            borderRadius: '5px',
+                            padding: '6px',
+                            marginBottom: '12px',
+                            hover: {
+                                backgroundColor: appConfig.theme.colors.neutrals[700],
+                            }
                         }}
-                        tag="span"
                     >
-                        {(new Date().toLocaleDateString())}
+                        <Box
+                            styleSheet={{
+                                marginBottom: '8px',
+                            }}
+                        >
+                            <Image
+                                styleSheet={{
+                                    width: '20px',
+                                    height: '20px',
+                                    borderRadius: '50%',
+                                    display: 'inline-block',
+                                    marginRight: '8px',
+                                }}
+                                src={`https://github.com/muridev017.png`}
+                            />
+                            <Text tag="strong">
+                                {mensagem.de}
+                            </Text>
+                            <Text
+                                styleSheet={{
+                                    fontSize: '10px',
+                                    marginLeft: '8px',
+                                    color: appConfig.theme.colors.neutrals[300],
+                                }}
+                                tag="span"
+                            >
+                                {(new Date().toLocaleDateString())}
+                            </Text>
+                        </Box>
+                        {mensagem.texto}
                     </Text>
-                </Box>
-                {/* {mensagem.texto} */}
-            </Text>
+                )
+            })}
+            
         </Box>
     )
 }
+
