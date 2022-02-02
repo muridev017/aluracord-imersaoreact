@@ -82,7 +82,7 @@ export default function PaginaInicial() {
               infosDoEvento.preventDefault();
               if (isFormEnable){
               console.log('Alguém submeteu o form');
-              roteamento.push('/chat');
+              roteamento.push(`/chat?username=${username}`);
             }
             }}
             styleSheet={{
